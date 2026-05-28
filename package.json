@@ -1,0 +1,27 @@
+{
+  "name": "saucedemo_auto_learn",
+  "version": "1.0.0",
+  "description": "```bash git add .",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bui-thi-minh-anh/saucedemo_auto_learn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bui-thi-minh-anh/saucedemo_auto_learn/issues"
+  },
+  "homepage": "https://github.com/bui-thi-minh-anh/saucedemo_auto_learn#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "typescript": "^6.0.3"
+  }
+}
