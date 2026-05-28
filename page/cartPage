@@ -1,0 +1,43 @@
+import {Page, Locator} from '@playwright/test';
+import { BasePage } from './BasePage';
+
+export class CartPage extends BasePage {
+    // properties
+    readonly cartItem: Locator;
+    readonly continueShoppingButton: Locator;
+    readonly checkoutButton: Locator;
+    readonly shoppingCartButton: Locator;
+
+    // constructor
+    constructor(page: Page) {
+        super(page);
+        this.cartItem = page.locator('.cart_item');
+        this.continueShoppingButton = page.getByRole('button', { name: 'Continue Shopping' });
+        this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
+        this.shoppingCartButton = page.locator('.shopping_cart_link');
+    }
+    
+    async open() {
+        await this.goto('https://www.saucedemo.com/cart.html');
+        await this.waitForPageLoad();
+    }
+
+    async getCartItemCount(): Promise<number> {
+        return await this.cartItem.count();
+    }
+
+    async continueShopping() {
+        await this.continueShoppingButton.click();
+        await this.waitForPageLoad();
+    }
+
+    async checkout() {
+        await this.checkoutButton.click();
+        await this.waitForPageLoad();
+    }
+
+    async openCart() {
+        await this.shoppingCartButton.click();
+        await this.waitForPageLoad();
+    }
+}

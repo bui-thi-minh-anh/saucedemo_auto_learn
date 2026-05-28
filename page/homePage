@@ -1,0 +1,78 @@
+// ============================================================
+// Zone 1: Imports
+// ============================================================
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
+
+export class InventoryPage extends BasePage {
+
+  // ============================================================
+  // Zone 2: Properties
+  // ============================================================
+  readonly productList: Locator;
+  readonly productNames: Locator;
+  readonly sortDropdown: Locator;
+  readonly cartIcon: Locator;
+
+  // ============================================================
+  // Zone 3: Constructor
+  // ============================================================
+  constructor(page: Page) {
+    super(page); // Kế thừa BasePage
+    this.productList  = page.locator('.inventory_item');
+    this.productNames = page.locator('.inventory_item_name');
+    this.sortDropdown = page.locator('[data-test="product-sort-container"]');
+    this.cartIcon     = page.locator('.shopping_cart_link');
+  }
+
+  // ============================================================
+  // Zone 4: Action Methods (riêng cho Inventory)
+  // ============================================================
+
+  /** Mở trang Inventory — dùng goto() kế thừa từ BasePage */
+  async open() {
+    await this.goto('https://www.saucedemo.com/inventory.html');
+    await this.waitForPageLoad();
+  }
+
+  /** Lấy danh sách tên tất cả sản phẩm */
+  async getProductNames(): Promise<string[]> {
+    return await this.productNames.allInnerTexts();
+  }
+
+  /** Add to cart theo tên sản phẩm cụ thể */
+  async addToCartByName(productName: string) {
+    const product = this.page
+      .locator('.inventory_item')
+      .filter({ hasText: productName });
+
+    await product.getByRole('button', { name: /add to cart/i }).click();
+  }
+
+  /** Mở trang chi tiết sản phẩm theo tên */
+  async openProductDetail(productName: string) {
+    await this.productNames.filter({ hasText: productName }).click();
+    await this.waitForPageLoad();
+  }
+
+  /** Sort sản phẩm theo option:
+   *  'az'    → Name (A to Z)
+   *  'za'    → Name (Z to A)
+   *  'lohi'  → Price (low to high)
+   *  'hilo'  → Price (high to low)
+   */
+  async sortBy(option: 'az' | 'za' | 'lohi' | 'hilo') {
+    await this.sortDropdown.selectOption(option);
+  }
+
+  /** Lấy số lượng sản phẩm hiển thị trên trang */
+  async getProductCount(): Promise<number> {
+    return await this.productList.count();
+  }
+
+  /** Mở giỏ hàng */
+  async openCart() {
+    await this.cartIcon.click();
+    await this.waitForPageLoad();
+  }
+}
